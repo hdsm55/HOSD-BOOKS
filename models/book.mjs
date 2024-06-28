@@ -1,9 +1,11 @@
-import { Pool } from 'pg';
-import fetch from 'node-fetch'; // إضافة fetch لجلب البيانات من Open Library API
+import pg from 'pg';
+const { Pool } = pg;
+
 import dotenv from 'dotenv';
 
 dotenv.config(); // تحميل متغيرات البيئة من ملف .env
 
+// إعداد الاتصال بقاعدة البيانات باستخدام متغيرات البيئة
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
     ssl: {
@@ -12,11 +14,9 @@ const pool = new Pool({
 });
 
 // تعريف الوظائف الأساسية
-const findAll = async () => {
-    const res = await pool.query('SELECT * FROM books');
-    return res.rows;
-};
 
+
+findAll()
 const findById = async (id) => {
     const res = await pool.query('SELECT * FROM books WHERE id = $1', [id]);
     return res.rows[0];
@@ -42,11 +42,5 @@ const deleteBook = async (id) => {
     await pool.query('DELETE FROM books WHERE id = $1', [id]);
 };
 
-// وظيفة لجلب تفاصيل الكتاب من Open Library
-const fetchBookDetails = async (isbn) => {
-    const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
-    const data = await response.json();
-    return data[`ISBN:${isbn}`];
-};
-
-export { findAll, findById, create, update, deleteBook, fetchBookDetails };
+// تصدير الوظائف
+export { findAll, findById, create, update, deleteBook };

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Book List</h1>
+    <a href="/add-book">Add a new book</a>
+    <ul>
+        <% books.forEach(book => { %>
+            <li>
+                <a href="/books/<%= book.id %>"><%= book.title %></a>
+                by <%= book.author %>
+                <a href="/books/<%= book.id %>/edit">Edit</a>
+                <a href="/books/<%= book.id %>/delete">Delete</a>
+            </li>
+        <% }); %>
+    </ul>
+</body>
+</html>

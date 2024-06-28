@@ -1,29 +1,37 @@
 import express from 'express';
 import path from 'path';
+import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
-import { findAll, findById, create, update, deleteBook, fetchBookDetails } from './models/book.mjs';
+import dotenv from 'dotenv';
 
-const app = express();
+dotenv.config(); // تحميل متغيرات البيئة من ملف .env
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const app = express();
 
-// إعداد EJS كتمبليت
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// إعداد الملفات الثابتة
+app.use(express.static("public"));
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// إعداد مجلد الملفات الثابتة (CSS, JS)
-app.use(express.static(path.join(__dirname, 'public')));
 
-// إعداد body parser للتعامل مع بيانات النموذج
-app.use(express.urlencoded({ extended: true }));
-
+const findAll = async () => {
+    const res = await pool.query('SELECT * FROM books');
+    return res.rows;
+    console.log(res.rows)
+};
 // المسارات
 
 // الصفحة الرئيسية - عرض قائمة الكتب
 app.get('/', async (req, res) => {
     try {
         const books = await findAll();
-        res.render('index', { books });
+        res.render('index', { books : books });
+        console.log(books);
     } catch (err) {
         console.error(err);
         res.send('خطأ في جلب البيانات');

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Book</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <h1>Delete book</h1>
+    <p>Are you sure you want to delete <strong><%= book.title %></strong> by <strong><%= book.author %></strong>?</p>
+    <form action="/books/<%= book.id %>/delete" method="POST">
+        <button type="submit">Yes, delete</button>
+        <a href="/">No, go back</a>
+    </form>
+</body>
+</html>
